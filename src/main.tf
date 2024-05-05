@@ -1,7 +1,11 @@
 terraform {
-  required_version = "~> 1.7.4"
+  required_version = ">= 1.7.4, <= 1.8.1"
 
-  backend "local" { path = "../../tfstate/fiap-irango-k8s.tfstate" }
+  backend "s3" {
+    bucket = "fiap-irango-tfstate"
+    key    = "fiap-irango-k8s.tfstate"
+    region = "us-east-1"
+  }
 
   required_providers {
     aws = {
@@ -23,6 +27,10 @@ provider "aws" {
 }
 
 data "terraform_remote_state" "infra" {
-  backend = "local"
-  config  = { path = "../../tfstate/fiap-irango-infra.tfstate" }
+  backend = "s3"
+  config = {
+    bucket = "fiap-irango-tfstate"
+    key    = "fiap-irango-infra.tfstate"
+    region = "us-east-1"
+  }
 }
