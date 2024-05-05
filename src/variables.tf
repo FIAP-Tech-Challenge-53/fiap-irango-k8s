@@ -1,12 +1,16 @@
 # Task Definition
-variable "min_size" {
+variable "work_node_api_min_size" {
   default = 1
 }
 
-variable "max_size" {
+variable "work_node_api_max_size" {
   default = 3
 }
 
-variable "desired_size" {
+variable "work_node_api_desired_size" {
   default = 2
+}
+
+variable "work_node_api_instance_type" {
+  default = "t3.micro"
 }

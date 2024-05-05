@@ -7,7 +7,9 @@ data "aws_iam_policy_document" "assume_role_node" {
       identifiers = ["ec2.amazonaws.com"]
     }
 
-    actions = ["sts:AssumeRole"]
+    actions = [
+      "sts:AssumeRole"
+    ]
   }
 }
 
@@ -31,10 +33,11 @@ resource "aws_iam_role_policy_attachment" "eks_node-AmazonEC2ContainerRegistryRe
   role       = aws_iam_role.eks_node.name
 }
 
-resource "aws_eks_node_group" "default" {
-  cluster_name    = "${data.terraform_remote_state.infra.outputs.resource_prefix}-eks-cluster"
-  node_group_name = "${data.terraform_remote_state.infra.outputs.resource_prefix}-eks-node-group"
+resource "aws_eks_node_group" "api" {
+  cluster_name    = "${data.terraform_remote_state.infra.outputs.resource_prefix}-k8s-cluster"
+  node_group_name = "${data.terraform_remote_state.infra.outputs.resource_prefix}-k8s-node-group-api"
   node_role_arn   = aws_iam_role.eks_node.arn
+  instance_types  = [var.work_node_api_instance_type]
 
   subnet_ids = [
     data.terraform_remote_state.infra.outputs.subnet_private_a_id,
@@ -42,9 +45,9 @@ resource "aws_eks_node_group" "default" {
   ]
 
   scaling_config {
-    desired_size = var.desired_size
-    min_size     = var.min_size
-    max_size     = var.max_size
+    desired_size = var.work_node_api_desired_size
+    min_size     = var.work_node_api_min_size
+    max_size     = var.work_node_api_max_size
   }
 
   depends_on = [
@@ -53,4 +56,8 @@ resource "aws_eks_node_group" "default" {
     aws_iam_role_policy_attachment.eks_node-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eks_node-AmazonEC2ContainerRegistryReadOnly
   ]
+
+  tags = {
+    Name = "${data.terraform_remote_state.infra.outputs.resource_prefix}-eks-node-group-api"
+  }
 }
