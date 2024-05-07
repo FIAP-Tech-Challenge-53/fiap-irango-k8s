@@ -1,13 +1,13 @@
 #!/bin/bash
 
 init:
-	terraform -chdir=src init
+	terraform -chdir=terraform init
 
 plan:
-	terraform -chdir=src plan
+	terraform -chdir=terraform plan
 
 up:
-	terraform -chdir=src apply
+	terraform -chdir=terraform apply -auto-approve
 
 down:
-	terraform -chdir=src destroy
+	terraform -chdir=terraform destroy -auto-approve

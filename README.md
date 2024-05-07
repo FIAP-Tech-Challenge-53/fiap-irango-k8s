@@ -42,17 +42,16 @@ make down
 ### Without make
 ```bash
 # To init terraform
-terraform -chdir=src init
+terraform -chdir=terraform init
 
 # To run terraform plan
-terraform -chdir=src plan
+terraform -chdir=terraform plan
 
 # To apply changes
-terraform -chdir=src apply
+terraform -chdir=terraform apply -auto-approve
 ```
 
 To destroy resources:
 ```bash
-terraform -chdir=src destroy
+terraform -chdir=terraform destroy -auto-approve
 ```
-
