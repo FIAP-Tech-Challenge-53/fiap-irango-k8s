@@ -1,0 +1,25 @@
+name: Release API
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_uri:
+        description: 'The URI of the image to deploy'
+        required: true
+        type: string
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: fiap-irango-ecr
+
+  IMAGE_URI: ${{ inputs.image_uri }}
+
+jobs:
+  release:
+    name: Release new image on EKS
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Echo
+        run: echo "Release new image on EKS with URI ${{ env.IMAGE_URI }}"
