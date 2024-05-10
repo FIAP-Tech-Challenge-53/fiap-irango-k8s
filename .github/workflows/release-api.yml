@@ -1,0 +1,19 @@
+name: Release
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: fiap-irango-ecr
+
+jobs:
+  release:
+    name: Release new image on EKS
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Echo
+        run: echo "Release new image on EKS"

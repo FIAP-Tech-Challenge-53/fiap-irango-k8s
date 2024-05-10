@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: volume-mysql
+  namespace: irango
+spec:
+  resources:
+    requests:
+      storage: 15Gi
+  volumeMode: Filesystem
+  storageClassName: csi-hostpath-sc
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: irango
+  labels:
+    app: mysql
+spec:
+  selector:
+    app: mysql
+  type: ClusterIP
+  ports:
+  - port: 3306
+    name: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: irango
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: mysql
+  replicas: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: irango-config
+              key: DB_DATABASE
+        - name:  MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name:  irango-secret
+              key:  DB_PASSWORD
+        volumeMounts:
+          - name: mysql-ps
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-ps
+          persistentVolumeClaim:
+            claimName: volume-mysql
+

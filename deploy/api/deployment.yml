@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: irango-api
+  namespace: irango
+  labels:
+    app: irango-api
+spec:
+  selector:
+    matchLabels:
+      app: irango-api
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      name: irango-api
+      namespace: irango
+      labels:
+        app: irango-api
+        version: "latest"
+    spec:
+      containers:
+        - name: irango-api
+          image: matob/irango-api:latest
+          livenessProbe:
+            httpGet:
+              path: /health-check
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: "512Mi"
+            requests:
+              memory: "256Mi"
+          imagePullPolicy: "Always"
+          ports:
+          - containerPort: 3000
+          envFrom:
+          - secretRef:
+              name: irango-secret
+          - configMapRef:
+              name: irango-config

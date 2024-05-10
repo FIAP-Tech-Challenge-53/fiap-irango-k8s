@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: irango-api
+  namespace: irango
+  labels:
+    app: irango-api
+spec:
+  template:
+    metadata:
+      name:  name
+    spec:
+      containers:
+      - name: irango-api-migrate
+        image: matob/irango-api
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          npm run migration:run
+          npm run seed:run
+        envFrom:
+          - secretRef:
+              name: irango-secret
+          - configMapRef:
+              name: irango-config
+      restartPolicy: OnFailure
