@@ -9,8 +9,7 @@ on:
         type: string
 
 env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY: fiap-irango-ecr
+  EKS_CLUSTER_NAME: fiap-irango-k8s-cluster
 
   IMAGE_URI: ${{ inputs.image_uri }}
 
@@ -19,7 +18,39 @@ jobs:
     name: Release new image on EKS
     runs-on: ubuntu-latest
     timeout-minutes: 2
+    env:
+      IMAGE_URI: ${{ env.IMAGE_URI }}
 
     steps:
-      - name: Echo
-        run: echo "Release new image on EKS with URI ${{ env.IMAGE_URI }}"
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Load AWS secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: ${{ secrets.API_SECRETS_ID }
+          parse-json: true
+
+      - name: Prepare environments
+        run: |
+          envsubst < .k8s/api/template-secrets.yml > .k8s/api/secrets.yml
+          envsubst < .k8s/api/template-migration.yml > .k8s/api/migration.yml
+          envsubst < .k8s/api/template-deployment.yml > .k8s/api/deployment.yml
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to EKS
+        run: |
+          kubectl apply -f .k8s/api/namespace.yml
+          kubectl apply -f .k8s/api/secrets.yml
+          kubectl apply -f .k8s/api/configmap.yml
+          kubectl apply -f .k8s/api/migration.yml
+
+          kubectl apply -f .k8s/api/deployment.yml
+          kubectl apply -f .k8s/api/service.yml
+          kubectl apply -f .k8s/api/hpa.yml

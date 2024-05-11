@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: irango-api
+  namespace: irango
+spec:
+  selector:
+    app: irango-api
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 32000

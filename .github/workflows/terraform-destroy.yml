@@ -5,8 +5,6 @@ on:
 
 env:
   TF_LOG: INFO
-  AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-  AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
 
 jobs:
   destroy:
@@ -17,6 +15,19 @@ jobs:
         shell: bash
         working-directory: ./terraform
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Load AWS secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: ${{ secrets.API_SECRETS_ID }}
+          parse-json: true
+
       - name: Checkout the repository to the runner
         uses: actions/checkout@v4
 
