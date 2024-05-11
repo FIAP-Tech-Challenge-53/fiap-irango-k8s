@@ -34,5 +34,3 @@ data "terraform_remote_state" "infra" {
     region = "us-east-1"
   }
 }
-
-# Test Terraform Plan

@@ -1,6 +1,7 @@
 resource "aws_ecr_repository" "default" {
-  name                 = "${data.terraform_remote_state.infra.outputs.resource_prefix}-ecr"
+  name                 = "${data.terraform_remote_state.infra.outputs.resource_prefix}-ecr/fiap-irango-api"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
