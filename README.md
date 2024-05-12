@@ -21,6 +21,9 @@ Before all, you need set AWS credentials and Application ENVs using:
 export AWS_ACCESS_KEY_ID=xxxxxx
 export AWS_SECRET_ACCESS_KEY=xxxxxx
 
+# Docker image of fiap-irango-api service
+export IMAGE_URI=xxxxxx
+
 export SENTRY_DSN=xxxxxx
 export DB_HOSTNAME=xxxxxx
 export DB_USERNAME=xxxxxx
