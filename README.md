@@ -6,6 +6,8 @@
 
 ## Architecture Diagram:
 ![Architecture diagram](./docs/fiap-irango-k8s.png)
+## Cluster Diagram:
+![Cluster diagram](./docs/fiap-irango-k8s-cluster.png)
 
 ## Dependencies
 - [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform)
