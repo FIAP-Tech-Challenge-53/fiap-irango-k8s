@@ -4,6 +4,9 @@
 ![eks](https://img.shields.io/badge/Amazon_EKS-FF9900?style=for-the-badge&logo=amazoneks&logoColor=white)
 ![kubernetes](https://shields.io/badge/Kubernetes-326CE5?logo=Kubernetes&logoColor=FFF&style=flat-square)
 
+## Architecture Diagram:
+![Architecture diagram](./docs/fiap-irango-k8s.png)
+
 ## Dependencies
 - [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform)
 - [Kubernetes](https://kubernetes.io/)
