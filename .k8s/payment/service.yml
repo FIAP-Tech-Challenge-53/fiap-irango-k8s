@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: irango-api-payment
+  namespace: irango-payment
+spec:
+  selector:
+    app: irango-api-payment
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30002
