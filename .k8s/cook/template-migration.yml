@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: irango-api-migration
+  namespace: irango-cook
+  labels:
+    app: irango-api-cook
+spec:
+  template:
+    metadata:
+      name:  name
+    spec:
+      containers:
+      - name: irango-api-migration
+        image: $IMAGE_URI_COOK
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          npm run migration:run
+          npm run seed:run
+        envFrom:
+          - secretRef:
+              name: irango-secret
+          - configMapRef:
+              name: irango-cook-config
+      restartPolicy: OnFailure

@@ -1,0 +1,62 @@
+name: Release API Payment
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_uri:
+        description: 'The URI of the image to deploy'
+        required: false
+        type: string
+
+  workflow_run:
+    workflows: ["Terraform Apply"]
+    branches: [main]
+    types: 
+      - completed
+
+env:
+  AWS_REGION: us-east-1
+  EKS_CLUSTER_NAME: fiap-irango-k8s-cluster
+  IMAGE_URI: ${{ inputs.image_uri || format('{0}:latest', vars.AWS_ECR_REPOSITORY) }}
+
+jobs:
+  release:
+    name: Release new image on EKS
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare environments
+        run: |
+          aws secretsmanager get-secret-value --secret-id ${{ secrets.AWS_API_SECRETS_ID }} --query SecretString --output text > /tmp/secrets.json
+          npx convert-json-env /tmp/secrets.json --prefix="export " --out=/tmp/secrets.env
+          eval $(cat /tmp/secrets.env)
+          rm -rf /tmp/secrets.json && rm -rf /tmp/secrets.env
+
+          envsubst < ./.k8s/payment/template-secrets.yml > .k8s/payment/secrets.yml
+          envsubst < ./.k8s/payment/template-migration.yml > .k8s/payment/migration.yml
+          envsubst < ./.k8s/payment/template-deployment.yml > .k8s/payment/deployment.yml
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+      - name: Deploy to EKS
+        run: |
+          kubectl apply -f .k8s/payment/namespace.yml
+          kubectl apply -f .k8s/payment/secrets.yml
+          kubectl apply -f .k8s/payment/configmap.yml
+          kubectl apply -f .k8s/payment/migration.yml
+
+          kubectl apply -f .k8s/payment/deployment.yml
+          kubectl apply -f .k8s/payment/service.yml
+          kubectl apply -f .k8s/payment/hpa.yml

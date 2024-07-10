@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: irango-api-migration
+  namespace: irango-payment
+  labels:
+    app: irango-api-payment
+spec:
+  template:
+    metadata:
+      name:  name
+    spec:
+      containers:
+      - name: irango-api-migration
+        image: $IMAGE_URI_PAYMENT
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          npm run migration:run
+          npm run seed:run
+        envFrom:
+          - secretRef:
+              name: irango-secret
+          - configMapRef:
+              name: irango-api-payment
+      restartPolicy: OnFailure
