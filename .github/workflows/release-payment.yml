@@ -17,7 +17,7 @@ on:
 env:
   AWS_REGION: us-east-1
   EKS_CLUSTER_NAME: fiap-irango-k8s-cluster
-  IMAGE_URI: ${{ inputs.image_uri || format('{0}:latest', vars.AWS_ECR_REPOSITORY) }}
+  IMAGE_URI_PAYMENT: ${{ inputs.image_uri || format('{0}:latest', vars.AWS_ECR_REPOSITORY) }}
 
 jobs:
   release:
