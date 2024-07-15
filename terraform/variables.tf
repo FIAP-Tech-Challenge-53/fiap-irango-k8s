@@ -12,5 +12,5 @@ variable "work_node_api_desired_size" {
 }
 
 variable "work_node_api_instance_type" {
-  default = "t3.micro"
+  default = "t3.medium"
 }
