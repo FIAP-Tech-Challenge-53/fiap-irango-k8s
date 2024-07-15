@@ -22,5 +22,5 @@ spec:
           - secretRef:
               name: irango-secret
           - configMapRef:
-              name: irango-api-payment
+              name: irango-payment-config
       restartPolicy: OnFailure
