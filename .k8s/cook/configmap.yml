@@ -14,4 +14,4 @@ data:
   REDIS_DB: "0"
   REDIS_ENABLED: "true"
   CACHE_ENABLED: "true"
-  SERVICE_IRANGO_ORDER_API: "irango-api.irango-api.svc.cluster.local:3000"
+  SERVICE_IRANGO_ORDER_API: "http://irango-api.irango-api.svc.cluster.local:3000"

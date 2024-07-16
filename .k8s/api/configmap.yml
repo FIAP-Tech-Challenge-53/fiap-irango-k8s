@@ -14,5 +14,5 @@ data:
   REDIS_DB: "0"
   REDIS_ENABLED: "true"
   CACHE_ENABLED: "true"
-  SERVICE_IRANGO_PAYMENT_API: "irango-api-payment.irango-payment.svc.cluster.local:3000"
-  SERVICE_IRANGO_COOK_API: "irango-api-cook.irango-cook.svc.cluster.local:3000"
+  SERVICE_IRANGO_PAYMENT_API: "http://irango-api-payment.irango-payment.svc.cluster.local:3000"
+  SERVICE_IRANGO_COOK_API: "http://irango-api-cook.irango-cook.svc.cluster.local:3000"
