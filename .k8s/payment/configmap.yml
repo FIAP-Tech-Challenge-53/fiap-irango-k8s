@@ -14,4 +14,7 @@ data:
   REDIS_DB: "0"
   REDIS_ENABLED: "true"
   CACHE_ENABLED: "true"
-  SERVICE_IRANGO_ORDER_API: "http://irango-api.irango-api.svc.cluster.local:3000"
+  SNS_TOPIC_PAYMENT_CREATED: "arn:aws:sns:us-east-1:166954469144:fiap-irango-payment_payment-created"
+  SNS_TOPIC_PAYMENT_CONFIRMED: "arn:aws:sns:us-east-1:166954469144:fiap-irango-payment_payment-confirmed"
+  URL_QUEUE: "https://sqs.us-east-1.amazonaws.com/166954469144/"
+  CREATED_ORDER_QUEUE: "fiap-irango-payment_order-created"
