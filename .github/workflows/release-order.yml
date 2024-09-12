@@ -43,20 +43,20 @@ jobs:
           eval $(cat /tmp/secrets.env)
           rm -rf /tmp/secrets.json && rm -rf /tmp/secrets.env
 
-          envsubst < ./.k8s/api/template-secrets.yml > .k8s/api/secrets.yml
-          envsubst < ./.k8s/api/template-migration.yml > .k8s/api/migration.yml
-          envsubst < ./.k8s/api/template-deployment.yml > .k8s/api/deployment.yml
+          envsubst < ./.k8s/order/template-secrets.yml > .k8s/order/secrets.yml
+          envsubst < ./.k8s/order/template-migration.yml > .k8s/order/migration.yml
+          envsubst < ./.k8s/order/template-deployment.yml > .k8s/order/deployment.yml
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Deploy to EKS
         run: |
-          kubectl apply -f .k8s/api/namespace.yml
-          kubectl apply -f .k8s/api/secrets.yml
-          kubectl apply -f .k8s/api/configmap.yml
-          kubectl apply -f .k8s/api/migration.yml
+          kubectl apply -f .k8s/namespace.yml
+          kubectl apply -f .k8s/order/secrets.yml
+          kubectl apply -f .k8s/order/configmap.yml
+          kubectl apply -f .k8s/order/migration.yml
 
-          kubectl apply -f .k8s/api/deployment.yml
-          kubectl apply -f .k8s/api/service.yml
-          kubectl apply -f .k8s/api/hpa.yml
+          kubectl apply -f .k8s/order/deployment.yml
+          kubectl apply -f .k8s/order/service.yml
+          kubectl apply -f .k8s/order/hpa.yml

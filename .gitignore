@@ -1,2 +1,13 @@
 /terraform/.terraform
 /terraform/.terraform.lock.hcl
+
+.k8s/cook/deployment.yml
+.k8s/cook/secrets.yml
+
+.k8s/order/deployment.yml
+.k8s/order/migration.yml
+.k8s/order/secrets.yml
+
+.k8s/payment/deployment.yml
+.k8s/payment/migration.yml
+.k8s/payment/secrets.yml

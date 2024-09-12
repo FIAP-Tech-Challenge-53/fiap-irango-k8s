@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: irango-api-payment
-  namespace: irango-payment
+  name: irango-payment-api
+  namespace: irango
   labels:
-    app: irango-api-payment
+    app: irango-payment-api
 spec:
   selector:
     matchLabels:
-      app: irango-api-payment
+      app: irango-payment-api
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -20,9 +20,9 @@ spec:
   template:
     metadata:
       name: irango-api
-      namespace: irango-payment
+      namespace: irango
       labels:
-        app: irango-api-payment
+        app: irango-payment-api
         version: "latest"
     spec:
       containers:
@@ -45,6 +45,6 @@ spec:
           - containerPort: 3000
           envFrom:
           - secretRef:
-              name: irango-secret
+              name: irango-payment-api-secret
           - configMapRef:
-              name: irango-payment-config
+              name: irango-payment-api-config

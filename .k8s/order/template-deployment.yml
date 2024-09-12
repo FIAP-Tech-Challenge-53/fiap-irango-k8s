@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: irango-api
+  name: irango-order-api
   namespace: irango
   labels:
-    app: irango-api
+    app: irango-order-api
 spec:
   selector:
     matchLabels:
-      app: irango-api
+      app: irango-order-api
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -19,14 +19,14 @@ spec:
   revisionHistoryLimit: 10
   template:
     metadata:
-      name: irango-api
+      name: irango-order-api
       namespace: irango
       labels:
-        app: irango-api
+        app: irango-order-api
         version: "latest"
     spec:
       containers:
-        - name: irango-api
+        - name: irango-order-api
           image: $IMAGE_URI
           livenessProbe:
             httpGet:
@@ -45,6 +45,6 @@ spec:
           - containerPort: 3000
           envFrom:
           - secretRef:
-              name: irango-secret
+              name: irango-order-api-secret
           - configMapRef:
-              name: irango-config
+              name: irango-order-api-config

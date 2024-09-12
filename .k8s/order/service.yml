@@ -1,17 +1,17 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: irango-api
+  name: irango-order-api
   namespace: irango
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: nlb
     service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 spec:
   selector:
-    app: irango-api
+    app: irango-order-api
   type: LoadBalancer
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-      nodePort: 32000
+      nodePort: 30001

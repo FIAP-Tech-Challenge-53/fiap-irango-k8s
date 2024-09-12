@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: irango-config
+  name: irango-order-api-config
   namespace: irango
 data:
   NODE_ENV: "production"

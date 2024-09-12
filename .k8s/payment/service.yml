@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: irango-api-payment
-  namespace: irango-payment
+  name: irango-payment-api
+  namespace: irango
 spec:
   selector:
-    app: irango-api-payment
+    app: irango-payment-api
   type: LoadBalancer
   ports:
     - protocol: TCP

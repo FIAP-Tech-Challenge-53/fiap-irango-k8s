@@ -57,7 +57,7 @@ make plan
 make up
 
 # To deploy API pods
-make up.api
+make up.api-order
 
 # To deploy API cook pods
 make up.api-cook
@@ -82,29 +82,27 @@ terraform -chdir=terraform plan
 # To apply changes
 terraform -chdir=terraform apply -auto-approve
 
-# To deploy API pods
+# To deploy API Order pods
 aws eks update-kubeconfig --name fiap-irango-k8s-cluster --region us-east-1
-envsubst < ./.k8s/api/template-secrets.yml > .k8s/api/secrets.yml
-envsubst < ./.k8s/api/template-migration.yml > .k8s/api/migration.yml
-envsubst < ./.k8s/api/template-deployment.yml > .k8s/api/deployment.yml
-kubectl apply -f .k8s/api/namespace.yml
-kubectl apply -f .k8s/api/secrets.yml
-kubectl apply -f .k8s/api/configmap.yml
-kubectl apply -f .k8s/api/migration.yml
-kubectl apply -f .k8s/api/deployment.yml
-kubectl apply -f .k8s/api/service.yml
-kubectl apply -f .k8s/api/hpa.yml
+envsubst < ./.k8s/order/template-secrets.yml > .k8s/order/secrets.yml
+envsubst < ./.k8s/order/template-migration.yml > .k8s/order/migration.yml
+envsubst < ./.k8s/order/template-deployment.yml > .k8s/order/deployment.yml
+kubectl apply -f .k8s/namespace.yml
+kubectl apply -f .k8s/order/secrets.yml
+kubectl apply -f .k8s/order/configmap.yml
+kubectl apply -f .k8s/order/migration.yml
+kubectl apply -f .k8s/order/deployment.yml
+kubectl apply -f .k8s/order/service.yml
+kubectl apply -f .k8s/order/hpa.yml
 
 
 # To deploy API Cook pods
 aws eks update-kubeconfig --name fiap-irango-k8s-cluster --region us-east-1
 envsubst < ./.k8s/cook/template-secrets.yml > .k8s/cook/secrets.yml
-envsubst < ./.k8s/cook/template-migration.yml > .k8s/cook/migration.yml
 envsubst < ./.k8s/cook/template-deployment.yml > .k8s/cook/deployment.yml
-kubectl apply -f .k8s/cook/namespace.yml
+kubectl apply -f .k8s/namespace.yml
 kubectl apply -f .k8s/cook/secrets.yml
 kubectl apply -f .k8s/cook/configmap.yml
-kubectl apply -f .k8s/cook/migration.yml
 kubectl apply -f .k8s/cook/deployment.yml
 kubectl apply -f .k8s/cook/service.yml
 kubectl apply -f .k8s/cook/hpa.yml
@@ -115,7 +113,7 @@ aws eks update-kubeconfig --name fiap-irango-k8s-cluster --region us-east-1
 envsubst < ./.k8s/payment/template-secrets.yml > .k8s/payment/secrets.yml
 envsubst < ./.k8s/payment/template-migration.yml > .k8s/payment/migration.yml
 envsubst < ./.k8s/payment/template-deployment.yml > .k8s/payment/deployment.yml
-kubectl apply -f .k8s/payment/namespace.yml
+kubectl apply -f .k8s/namespace.yml
 kubectl apply -f .k8s/payment/secrets.yml
 kubectl apply -f .k8s/payment/configmap.yml
 kubectl apply -f .k8s/payment/migration.yml
@@ -128,12 +126,3 @@ To destroy resources:
 ```bash
 terraform -chdir=terraform destroy -auto-approve
 ```
-
-
-sudo k3s kubectl apply -f .k8s/cook/namespace.yml
-sudo k3s kubectl apply -f .k8s/cook/secrets.yml
-sudo k3s kubectl apply -f .k8s/cook/configmap.yml
-sudo k3s kubectl apply -f .k8s/cook/migration.yml
-sudo k3s kubectl apply -f .k8s/cook/deployment.yml
-sudo k3s kubectl apply -f .k8s/cook/service.yml
-sudo k3s kubectl apply -f .k8s/cook/hpa.yml

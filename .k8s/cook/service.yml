@@ -1,14 +1,14 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: irango-api-cook
-  namespace: irango-cook
+  name: irango-cook-api
+  namespace: irango
 spec:
   selector:
-    app: irango-api-cook
+    app: irango-cook-api
   type: LoadBalancer
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-      nodePort: 30001
+      nodePort: 30003
