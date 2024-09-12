@@ -1,4 +1,4 @@
-name: Release API Payment
+name: Release Payment API
 
 on:
   workflow_dispatch:

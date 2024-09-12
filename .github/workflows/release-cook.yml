@@ -1,4 +1,4 @@
-name: Release API Cook
+name: Release Cook API
 
 on:
   workflow_dispatch:
